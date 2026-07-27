@@ -55,6 +55,8 @@ const studentFeatures = [
   },
 ];
 
+
+
 const Student = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,7 +66,10 @@ const Student = () => {
     <div className="bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] scroll-smooth font-poppins overflow-x-hidden">
       <NavbarStudent />
 
-      {/* 🔙 Back to Main Home */}
+                
+                
+                
+                {/* 🔙 Back to Main Home */}
       <div className="fixed top-[90px] left-3 z-50 hidden md:block">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -83,7 +88,10 @@ const Student = () => {
 
 
 
-      {/* 🎓 Student Landing Section */}
+                     
+                     
+                     
+                     {/* 🎓 Student Landing Section */}
       <section className="min-h-screen pt-28 flex items-center">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
           <motion.div
