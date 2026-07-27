@@ -309,7 +309,7 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-          {/* Upload Area */}
+                                  {/* Upload Area */}
           <div
             className={`w-full border-2 border-dashed ${
               dragActive
@@ -356,7 +356,7 @@ const ShareResource = ({ onShare, onClose }) => {
 
 
 
-          {/* Submit */}
+                        {/* Submit */}
           <button
             type="submit"
             disabled={isLoading}
