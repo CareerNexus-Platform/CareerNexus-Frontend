@@ -577,7 +577,7 @@ const Resources = () => {
 
                                   {/* Modern Search Bar */}
 
-                                  
+
               <div className="relative w-full max-w-sm">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <FaSearch className="text-gray-400" />
@@ -591,6 +591,9 @@ const Resources = () => {
                 />
               </div>
             </div>
+
+
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               {Object.entries(filteredTechnicalResources).map(([cat, topics], index) => (
@@ -607,6 +610,8 @@ const Resources = () => {
                     </div>
                     <h3 className="text-xl font-bold text-[#2C225A]">{cat}</h3>
                   </div>
+
+
 
                   <div className="flex flex-wrap gap-3">
                     {topics.map((topic) => (
@@ -636,7 +641,12 @@ const Resources = () => {
         )}
       </motion.div>
 
-      {/* Footer */}
+
+
+                                {/* Footer */}  
+
+
+
       <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 relative z-10 mt-auto">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
