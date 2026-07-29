@@ -557,7 +557,12 @@ const Resources = () => {
           </div>
         )}
 
-        {/* Technical Resources Flow */}
+        
+        
+        
+                              {/* Technical Resources Flow */}
+
+
         {category === "technical" && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -570,7 +575,9 @@ const Resources = () => {
                 Explore Tech Topics
               </h2>
 
-              {/* Modern Search Bar */}
+                                  {/* Modern Search Bar */}
+
+                                  
               <div className="relative w-full max-w-sm">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <FaSearch className="text-gray-400" />
