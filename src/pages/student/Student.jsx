@@ -92,6 +92,8 @@ const Student = () => {
                      
                      
                      {/* 🎓 Student Landing Section */}
+
+
       <section className="min-h-screen pt-28 flex items-center">
         <div className="container mx-auto px-4 sm:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
           <motion.div
@@ -167,7 +169,10 @@ const Student = () => {
 
 
 
+      
       {/* 🚀 Features Section */}
+
+
       <section
         id="student-features"
         className="py-32 relative overflow-hidden bg-gradient-to-b from-[#E4EBFE]/50 to-[#F8E5EB]/50"
@@ -207,7 +212,13 @@ const Student = () => {
                   {feature.desc}
                 </p>
 
+                
+                
+                
+                
                 {/* Decorative background element */}
+
+
                 <div className={`absolute -bottom-10 -right-10 opacity-[0.03] text-9xl ${feature.text} group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none`}>
                   {feature.icon}
                 </div>
@@ -217,7 +228,12 @@ const Student = () => {
         </div>
       </section>
 
-      {/* 💼 About Section */}
+      
+      
+      
+                        {/* 💼 About Section */}
+
+
       <section id="student-about" className="py-24 px-6 bg-gradient-to-b from-[#F8E5EB] to-[#E4EBFE]">
         <div className="container mx-auto">
           <motion.div
