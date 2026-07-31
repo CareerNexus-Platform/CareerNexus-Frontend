@@ -36,7 +36,7 @@ const StudentApplications = () => {
         setIsLoading(true);
         const res = await requestApi.get(`/applications/my-applications`);
         if (res && Array.isArray(res.data) && res.data.length > 0) {
-          // Default sort to latest
+                                      // Default sort to latest
           const sorted = [...res.data].sort(
             (a, b) => new Date(b.applicationDate) - new Date(a.applicationDate),
           );
@@ -64,7 +64,12 @@ const StudentApplications = () => {
 
 
 
-  // Fetch rounds when a job is selected
+  
+  
+  
+                              // Fetch rounds when a job is selected
+
+
   useEffect(() => {
     const fetchJobRounds = async () => {
       if (!selectedJob?.jobPost?.id) return;
@@ -117,7 +122,12 @@ const StudentApplications = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] font-poppins relative overflow-hidden">
-      {/* Background Decorative Elements */}
+      
+      
+      
+                              {/* Background Decorative Elements */}
+
+                              
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/20 rounded-full blur-[120px] pointer-events-none"></div>
 
