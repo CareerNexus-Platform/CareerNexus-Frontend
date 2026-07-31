@@ -127,7 +127,7 @@ const StudentApplications = () => {
       
                               {/* Background Decorative Elements */}
 
-                              
+
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/20 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -140,7 +140,14 @@ const StudentApplications = () => {
         transition={{ duration: 0.6 }}
       >
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
+          
+          
+          
+                        {/* Header */}
+
+
+
+
           <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center gap-4">
               <Link
@@ -187,7 +194,16 @@ const StudentApplications = () => {
 
 
 
-          {/* Applications List */}
+          
+          
+          
+          
+          
+                            {/* Applications List */}
+
+
+
+                            
           <div className="bg-white/40 backdrop-blur-xl border border-white/80 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(107,78,207,0.05)]">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20">
