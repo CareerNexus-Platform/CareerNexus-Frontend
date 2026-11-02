@@ -6,6 +6,7 @@ import {
   BriefcaseBusiness,
   Code2,
   Route,
+  Compass
 } from "lucide-react";
 import NexusLogo from "./NexusLogo";
 
