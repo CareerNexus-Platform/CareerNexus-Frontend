@@ -1,6 +1,7 @@
+import { apiErrorMessage } from "../../services/apiConfig";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import requestApi from "../../services/request";
 import toast from "react-hot-toast";
 import CodeEditor from "./studentPractice/CodeEditor";
@@ -44,7 +45,7 @@ const StudentCodingExam = () => {
         setAnswers(initialAnswers);
       } catch (err) {
         const errorMsg =
-          err.response?.data || "Failed to load exam. It might have ended.";
+          apiErrorMessage(err, "Failed to load exam. It might have ended.");
         toast.error(errorMsg);
         navigate("/student/" + getUserId() + "/coding-assessments");
       } finally {
@@ -96,7 +97,7 @@ const StudentCodingExam = () => {
       );
       navigate("/student/" + userId + "/coding-assessments");
     } catch (err) {
-      toast.error(err.response?.data || "Submission failed");
+      toast.error(apiErrorMessage(err, "Submission failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -104,8 +105,8 @@ const StudentCodingExam = () => {
 
   if (loading)
     return (
-      <div className="h-screen bg-[#0f0c1d] flex flex-col items-center justify-center text-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-violet-500 mb-4"></div>
+      <div className="h-screen bg-ink flex flex-col items-center justify-center text-white">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-brand-500 mb-4"></div>
         <p className="text-xl font-medium">
           Entering secure exam environment...
         </p>
@@ -117,11 +118,11 @@ const StudentCodingExam = () => {
   const currentQuestion = assessment.questions[currentQuestionIndex];
 
   return (
-    <div className="h-screen bg-[#0f0c1d] flex flex-col overflow-hidden font-poppins">
+    <div className="cn-studio cn-coding-exam h-screen bg-ink flex flex-col overflow-hidden font-poppins">
       {/* Exam Header */}
-      <header className="h-16 bg-[#16112a] border-b border-gray-800 px-6 flex items-center justify-between z-50">
+      <header className="h-16 bg-ink border-b border-gray-800 px-6 flex items-center justify-between z-50">
         <div className="flex items-center gap-4">
-          <div className="bg-violet-600 p-2 rounded-lg">
+          <div className="bg-brand-600 p-2 rounded-lg">
             <FaTerminal className="text-white" />
           </div>
           <div>
@@ -130,7 +131,7 @@ const StudentCodingExam = () => {
             </h1>
             <p className="text-xs text-gray-400">Student: {userId}</p>
             {assessment.totalScore != null && assessment.maxScore != null && (
-              <p className="text-xs text-emerald-400 mt-1">
+              <p className="text-xs text-brand-400 mt-1">
                 Last practice score: {assessment.totalScore} /{" "}
                 {assessment.maxScore}
               </p>
@@ -145,7 +146,7 @@ const StudentCodingExam = () => {
               key={idx}
               onClick={() => setCurrentQuestionIndex(idx)}
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer transition-all
-                                ${currentQuestionIndex === idx ? "bg-violet-600 text-white scale-110 shadow-[0_0_12px_rgba(139,92,246,0.5)]" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
+                                ${currentQuestionIndex === idx ? "bg-brand-600 text-white scale-110 shadow-[0_0_12px_rgba(65, 45, 32,0.5)]" : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
             >
               {idx + 1}
             </div>
@@ -156,7 +157,7 @@ const StudentCodingExam = () => {
           <button
             onClick={handleSubmitExam}
             disabled={isSubmitting}
-            className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:shadow-lg transition disabled:opacity-50"
+            className="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:shadow-lg transition disabled:opacity-50"
           >
             {isSubmitting ? (
               "Submitting..."
@@ -172,20 +173,21 @@ const StudentCodingExam = () => {
       {/* Main Content Area */}
       <main className="flex-1 overflow-hidden relative">
         <AnimatePresence mode="wait">
-          <motion.div
+          <Motion.div
             key={currentQuestionIndex}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             className="h-full"
           >
-            {/* 
-                          CRITICAL: We pass the question to CodeEditor. 
+            {/*
+                          CRITICAL: We pass the question to CodeEditor.
                           CodeEditor internally renders QuestionPanel + MonacoCodeEditor.
-                          However, CodeEditor captures code state internally. 
+                          However, CodeEditor captures code state internally.
                           We need a way to 'sync' our 'answers' state with CodeEditor.
                         */}
             <CodeEditor
+              initialCode={answers[currentQuestion.id]?.code}
               sessionId={`exam-${assessmentId}-${currentQuestion.id}`} // Unique session per question
               username={userId}
               question={currentQuestion}
@@ -195,12 +197,12 @@ const StudentCodingExam = () => {
               onCodeChange={handleCodeUpdate}
               onLanguageChange={handleLanguageUpdate}
             />
-          </motion.div>
+          </Motion.div>
         </AnimatePresence>
       </main>
 
       {/* Bottom Question Controls */}
-      <footer className="h-14 bg-[#16112a] border-t border-gray-800 flex items-center justify-between px-6">
+      <footer className="h-14 bg-ink border-t border-gray-800 flex items-center justify-between px-6">
         <button
           disabled={currentQuestionIndex === 0}
           onClick={() => setCurrentQuestionIndex((prev) => prev - 1)}
@@ -209,7 +211,7 @@ const StudentCodingExam = () => {
           <FaChevronLeft /> Previous Challenge
         </button>
 
-        <div className="flex items-center gap-2 text-violet-400 font-bold bg-violet-400/10 px-4 py-1 rounded-full text-sm">
+        <div className="flex items-center gap-2 text-brand-400 font-bold bg-brand-400/10 px-4 py-1 rounded-full text-sm">
           <FaAward /> {currentQuestion.points} Points
         </div>
 

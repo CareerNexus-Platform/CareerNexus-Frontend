@@ -1,0 +1,1 @@
+import {mergeConfig} from 'vite';import base from './vite.config.js';export default mergeConfig(base,{server:{host:'127.0.0.1',port:5174,strictPort:true,proxy:{'/api':'http://localhost:8081','/auth':'http://localhost:8081'}}});

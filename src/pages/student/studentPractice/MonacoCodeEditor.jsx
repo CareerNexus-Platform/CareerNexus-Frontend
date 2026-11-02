@@ -22,17 +22,17 @@ const MonacoCodeEditor = ({ code, selectedLanguage, selectedTheme, onCodeChange 
                     onCodeChange(newValue);
                 }}
                 options={{
-                    fontSize: 18,
+                    fontSize: 16,
                     fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
                     fontLigatures: true,
-                    lineHeight: 28,
+                    lineHeight: 26,
                     padding: { top: 20, bottom: 20 },
                     minimap: { enabled: false },
                     scrollBeyondLastLine: false,
                     wordWrap: "on",
                     automaticLayout: true,
-                    cursorBlinking: "smooth",
-                    smoothScrolling: true,
+                    cursorBlinking: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'solid' : 'smooth',
+                    smoothScrolling: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
                     scrollbar: {
                         verticalScrollbarSize: 10,
                         horizontalScrollbarSize: 10,

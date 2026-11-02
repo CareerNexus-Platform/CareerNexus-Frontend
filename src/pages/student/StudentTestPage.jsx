@@ -1,201 +1,274 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import requestApi from "../../services/request";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Clock3,
+  Maximize2,
+  Send,
+  LoaderCircle,
+  RotateCcw,
+} from "lucide-react";
 import toast from "react-hot-toast";
-
-const fallbackQuestions = [
-  {
-    Question: "What is the capital of India?",
-    correct_option: "Delhi",
-    options: ["Mumbai", "Delhi", "Chennai", "Kolkata"]
-  },
-  {
-    Question: "Which language is used for web development?",
-    correct_option: "HTML",
-    options: ["Python", "Java", "HTML", "C++"]
-  }
-];
-
-const StudentTestPage = () => {
-  const navigate = useNavigate();
+import requestApi from "../../services/request";
+import { Brand, EmptyState } from "../../components/ui";
+export default function StudentTestPage() {
   const { userId, assessmentId } = useParams();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(900); // 15 mins default
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const fullScreenRef = useRef(null);
-
+  const [index, setIndex] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(900);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const pendingRef = useRef(false);
+  const expiredRef = useRef(false);
+  const focusRef = useRef(null);
   useEffect(() => {
-    if (fullScreenRef.current) {
-      fullScreenRef.current.requestFullscreen?.();
-    }
-
-    let timer;
-
-    if (assessmentId) {
-      requestApi.get(`/exam/${assessmentId}/start`)
-        .then(res => {
-          if (res.data && res.data.questions && res.data.questions.length > 0) {
-            setQuestions(res.data.questions);
-            // Only start timer if successfully loaded
-            timer = setInterval(() => {
-              setTimeLeft(prev => {
-                if (prev <= 1) {
-                  clearInterval(timer);
-                  handleSubmit();
-                  return 0;
-                }
-                return prev - 1;
-              });
-            }, 1000);
-          } else {
-            setErrorMessage("No questions found for this assessment.");
-          }
-        })
-        .catch((err) => {
-          const msg = err.response?.data?.message || err.response?.data?.error || "Could not load exam. The test may not have started yet.";
-          setErrorMessage(msg);
-          toast.error(msg);
-        });
-    } else {
-        // Fallback for testing without an assessment ID
-        setQuestions(fallbackQuestions);
-        timer = setInterval(() => {
-          setTimeLeft(prev => {
-            if (prev <= 1) {
-              clearInterval(timer);
-              handleSubmit();
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-    }
-
-    return () => clearInterval(timer);
-  }, [assessmentId]);
-
-  const handleOptionSelect = (questionIndex, option) => {
-    setSelectedAnswers(prev => ({ ...prev, [questionIndex]: option }));
-  };
-
-  const handleSubmit = () => {
-    if (!assessmentId) return;
-
-    // Map `selectedAnswers` { index: "Option Text" } to `{ que_no: int, option: String }` structure expected by backend
-    const payload = Object.entries(selectedAnswers).map(([indexStr, optionText]) => {
-      const idx = parseInt(indexStr);
-      const q = questions[idx];
-      return {
-        que_no: parseInt(q.question_no || q.questionNo), // Handle potential field name mismatches
-        option: optionText
-      };
-    });
-
-    requestApi.post(`/exam/${assessmentId}/submit`, payload)
-      .then((res) => {
-        const data = res.data;
-        toast.success(`Test submitted successfully! Score: ${data.score}/${data.totalQuestions} - ${data.status}`);
-        navigate(`/student/${userId}/home`);
+    let active = true;
+    requestApi
+      .get(`/exam/${assessmentId}/start`)
+      .then(({ data }) => {
+        if (!active) return;
+        if (!data?.questions?.length) {
+          setError("There are no questions available for this assessment yet.");
+          return;
+        }
+        setQuestions(data.questions);
       })
       .catch((err) => {
-        toast.error(err.response?.data?.error || "Submission failed");
+        if (active)
+          setError(
+            err.response?.data?.message ||
+              err.response?.data?.error ||
+              "This assessment is not available right now. It may not have started yet.",
+          );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
-  };
-
-  const getButtonColor = index => {
-    return selectedAnswers[index] ? "bg-green-400" : "bg-gray-300";
-  };
-
-  const formatTime = () => {
-    const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-    const sec = String(timeLeft % 60).padStart(2, "0");
-    return `${min}:${sec}`;
-  };
-
-  const optionLetters = ["A", "B", "C", "D", "E"];
-
-  if (errorMessage) {
-    return (
-      <div className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A] items-center justify-center">
-        <div className="bg-white p-10 rounded-xl shadow-xl text-center max-w-md border-t-4 border-red-500">
-          <div className="text-red-500 text-5xl mb-4">🚫</div>
-          <h1 className="text-2xl font-bold text-[#2C225A] mb-4">Access Restricted</h1>
-          <p className="text-lg text-gray-600 mb-8">{errorMessage}</p>
-          <button 
-            onClick={() => navigate(`/student/${userId}/home`)} 
-            className="bg-[#6B4ECF] text-white px-8 py-3 rounded-lg hover:bg-[#5939b8] font-bold shadow-md transition-all hover:scale-105"
-          >
-            Return to Dashboard
-          </button>
-        </div>
-      </div>
+    return () => {
+      active = false;
+    };
+  }, [assessmentId]);
+  useEffect(() => {
+    if (!questions.length) return;
+    const timer = setInterval(
+      () => setTimeLeft((time) => Math.max(0, time - 1)),
+      1000,
     );
-  }
-
+    return () => clearInterval(timer);
+  }, [questions.length]);
+  const submit = useCallback(async () => {
+    if (pendingRef.current || !questions.length) return;
+    pendingRef.current = true;
+    setSubmitting(true);
+    const payload = Object.entries(answers).map(([questionIndex, answer]) => ({
+      que_no: parseInt(
+        questions[Number(questionIndex)].question_no ||
+          questions[Number(questionIndex)].questionNo ||
+          Number(questionIndex) + 1,
+      ),
+      option: answer,
+    }));
+    try {
+      const { data } = await requestApi.post(
+        `/exam/${assessmentId}/submit`,
+        payload,
+      );
+      toast.success(
+        `Assessment submitted. Score: ${data.score}/${data.totalQuestions}`,
+      );
+      if (document.fullscreenElement)
+        await document.exitFullscreen().catch(() => {});
+      navigate(`/student/${userId}/home`);
+    } catch (err) {
+      toast.error(
+        err.response?.data?.error ||
+          "We couldn’t submit your assessment. Please try again.",
+      );
+      pendingRef.current = false;
+      setSubmitting(false);
+    }
+  }, [answers, assessmentId, navigate, questions, userId]);
+  useEffect(() => {
+    if (timeLeft === 0 && questions.length && !expiredRef.current) {
+      expiredRef.current = true;
+      submit();
+    }
+  }, [questions.length, submit, timeLeft]);
+  const question = questions[index];
+  const answered = Object.keys(answers).length;
+  const timer = `${String(Math.floor(timeLeft / 60)).padStart(2, "0")}:${String(timeLeft % 60).padStart(2, "0")}`;
   return (
-    <div ref={fullScreenRef} className="flex w-full h-screen bg-gradient-to-br from-[#F8E5EB] to-[#E4EBFE] text-[#2C225A]">
-
-      {/* Sidebar */}
-      <div className="w-1/5 p-4 border-r border-violet-300 flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <span className="font-bold text-lg text-[#6B4ECF]">Timer: {formatTime()}</span>
-          <button onClick={handleSubmit} className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600">Submit</button>
-        </div>
-        <button onClick={() => navigate(`/student/${userId}/home`)} className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-600">Exit</button>
-        <div className="grid grid-cols-4 gap-2 mt-4">
-          {questions.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentQuestionIndex(index)}
-              className={`w-8 h-8 rounded-full text-sm font-bold text-white hover:scale-105 transition ${getButtonColor(index)}`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-col gap-2 mt-6">
+    <main className="cn-assessment" ref={focusRef}>
+      <header className="cn-exam-header">
+        <Brand to={`/student/${userId}/home`} />
+        <span>ASSESSMENT WORKSPACE</span>
+        <div>
           <button
-            onClick={() => setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0))}
-            className="bg-[#6B4ECF] text-white py-1 rounded-lg shadow-md hover:bg-[#5939b8]"
-          >Previous</button>
-          <button
-            onClick={() => setCurrentQuestionIndex((prev) => Math.min(prev + 1, questions.length - 1))}
-            className="bg-[#6B4ECF] text-white py-1 rounded-lg shadow-md hover:bg-[#5939b8]"
-          >Next</button>
-          <button
-            onClick={() => handleClear(currentQuestionIndex)}
-            className="bg-white border border-red-400 text-red-500 py-1 rounded-lg hover:bg-red-100 transition"
-          >Clear Answer</button>
+            className="cn-icon-button"
+            aria-label="Enter fullscreen"
+            onClick={() =>
+              focusRef.current?.requestFullscreen?.().catch(() => {})
+            }
+          >
+            <Maximize2 size={18} />
+          </button>
+          <span
+            className={`cn-exam-timer ${timeLeft < 120 ? "is-urgent" : ""}`}
+          >
+            <Clock3 size={17} />
+            {timer}
+          </span>
         </div>
-      </div>
-
-      {/* Question Panel */}
-      <div className="w-4/5 p-8 overflow-y-auto">
-        {questions.length > 0 && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-[#6B4ECF]">
-              Q{currentQuestionIndex + 1}. {questions[currentQuestionIndex].question_text || questions[currentQuestionIndex].Question}
+      </header>
+      {loading ? (
+        <div className="cn-route-loading" role="status">
+          <LoaderCircle size={22} className="animate-spin" />
+          Getting your assessment ready…
+        </div>
+      ) : error ? (
+        <div className="cn-exam-error">
+          <EmptyState
+            title="Let's get you back on track."
+            description={error}
+            to={`/student/${userId}/home`}
+            action="Return to overview"
+          />
+        </div>
+      ) : (
+        <div className="cn-exam-layout">
+          <aside className="cn-exam-sidebar">
+            <span className="cn-eyebrow">YOUR PROGRESS</span>
+            <h2>
+              {answered}
+              <span> / {questions.length} answered</span>
             </h2>
-            <div className="grid gap-4">
-              {questions[currentQuestionIndex].options?.map((opt, idx) => (
+            <div className="cn-exam-progress">
+              <span
+                style={{ width: `${(answered / questions.length) * 100}%` }}
+              />
+            </div>
+            <div className="cn-question-grid">
+              {questions.map((q, i) => (
                 <button
-                  key={idx}
-                  onClick={() => handleOptionSelect(currentQuestionIndex, opt)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border border-[#6B4ECF]/40 shadow-sm bg-white/80 hover:scale-[1.01] transition-all
-                    ${selectedAnswers[currentQuestionIndex] === opt ? "bg-[#E4EBFE] border-[#6B4ECF] ring-2 ring-[#6B4ECF]" : ""}`}
+                  key={q.question_no || q.questionNo || i}
+                  className={`${index === i ? "is-current" : ""} ${answers[i] ? "is-answered" : ""}`}
+                  aria-label={`Question ${i + 1}${answers[i] ? ", answered" : ", not answered"}`}
+                  aria-current={index === i ? "step" : undefined}
+                  onClick={() => setIndex(i)}
                 >
-                  <span className="font-bold mr-2">{optionLetters[idx] || String.fromCharCode(65 + idx)}.</span> {opt}
+                  {answers[i] ? <Check size={16} /> : i + 1}
                 </button>
               ))}
             </div>
-          </div>
-        )}
-      </div>
-    </div>
+            <p>You can revisit any question before submitting.</p>
+            <button
+              className="cn-button"
+              disabled={submitting}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `Submit your assessment? You have answered ${answered} of ${questions.length} questions.`,
+                  )
+                )
+                  submit();
+              }}
+            >
+              {submitting ? (
+                <LoaderCircle size={16} className="animate-spin" />
+              ) : (
+                <Send size={16} />
+              )}
+              {submitting ? "Submitting…" : "Submit assessment"}
+            </button>
+          </aside>
+          <section className="cn-question-panel">
+            <div className="cn-section-heading">
+              <span className="cn-eyebrow">
+                QUESTION {index + 1} OF {questions.length}
+              </span>
+              <span className="cn-badge">
+                {answers[index] ? "Answered" : "Not answered"}
+              </span>
+            </div>
+            <h1>
+              {question?.Question ||
+                question?.question ||
+                question?.questionText}
+            </h1>
+            <div
+              className="cn-answer-options"
+              role="group"
+              aria-label="Choose an answer"
+            >
+              {question?.options?.map((option, i) => (
+                <button
+                  key={i}
+                  className={answers[index] === option ? "is-selected" : ""}
+                  aria-pressed={answers[index] === option}
+                  disabled={submitting}
+                  onClick={() =>
+                    setAnswers((previous) => ({ ...previous, [index]: option }))
+                  }
+                >
+                  <span>{String.fromCharCode(65 + i)}</span>
+                  <strong>{option}</strong>
+                  {answers[index] === option && <Check size={18} />}
+                </button>
+              ))}
+            </div>
+            <div className="cn-question-actions">
+              <button
+                className="cn-quiet-link"
+                disabled={!answers[index] || submitting}
+                onClick={() =>
+                  setAnswers((previous) => {
+                    const updated = { ...previous };
+                    delete updated[index];
+                    return updated;
+                  })
+                }
+              >
+                <RotateCcw size={14} />
+                Clear answer
+              </button>
+              <div>
+                <button
+                  className="cn-button cn-button-white"
+                  disabled={index === 0}
+                  onClick={() => setIndex(index - 1)}
+                >
+                  <ArrowLeft size={15} />
+                  Previous
+                </button>
+                <button
+                  className="cn-button"
+                  disabled={index === questions.length - 1}
+                  onClick={() => setIndex(index + 1)}
+                >
+                  Next question
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+            <p className="cn-exam-hint">
+              Take your time. Read each question carefully before choosing your
+              answer.
+            </p>
+          </section>
+        </div>
+      )}
+      <footer className="cn-exam-footer">
+        <Link to={`/student/${userId}/home`}>
+          <ArrowLeft size={14} />
+          Return to workspace
+        </Link>
+        <span>CareerNexus · Focus on your next step.</span>
+      </footer>
+    </main>
   );
-};
-
-export default StudentTestPage;
+}

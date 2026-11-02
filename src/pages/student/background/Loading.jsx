@@ -1,6 +1,6 @@
 // src/components/LoadingSpinner.jsx
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 
 // Animation variants for the backdrop
 const backdropVariants = {
@@ -28,7 +28,7 @@ const Loading= ({ isLoading = true, message = "Loading..." }) => {
   return (
     <AnimatePresence>
       {isLoading && (
-        <motion.div
+        <Motion.div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           variants={backdropVariants}
           initial="hidden"
@@ -39,13 +39,13 @@ const Loading= ({ isLoading = true, message = "Loading..." }) => {
           <div className="absolute inset-0 bg-gray-950 bg-opacity-80 backdrop-blur-sm"></div>
 
           {/* Spinner content */}
-          <motion.div
+          <Motion.div
             className="relative bg-gray-800 p-8 rounded-xl shadow-2xl flex flex-col items-center justify-center gap-4 border border-gray-700"
             variants={spinnerVariants}
           >
             {/* SVG Spinner Animation */}
             <svg
-              className="animate-spin h-12 w-12 text-blue-500"
+              className="animate-spin h-12 w-12 text-brand-500"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -66,8 +66,8 @@ const Loading= ({ isLoading = true, message = "Loading..." }) => {
             </svg>
             {/* Optional message */}
             {message && <p className="text-white text-lg font-semibold">{message}</p>}
-          </motion.div>
-        </motion.div>
+          </Motion.div>
+        </Motion.div>
       )}
     </AnimatePresence>
   );

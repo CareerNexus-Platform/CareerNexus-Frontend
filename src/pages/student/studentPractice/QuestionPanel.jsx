@@ -5,16 +5,16 @@ const QuestionPanel = ({ question, isLightMode }) => {
 
   const styles = {
     titleText: isLightMode ? 'text-gray-900' : 'text-white',
-    containerText: isLightMode ? 'text-gray-800' : 'text-[#EADFFD]',
-    sectionTitle: isLightMode ? 'text-violet-700 border-gray-200' : 'text-violet-300 border-violet-500/20',
+    containerText: isLightMode ? 'text-gray-800' : 'text-paper',
+    sectionTitle: isLightMode ? 'text-brand-700 border-gray-200' : 'text-brand-300 border-brand-500/20',
     bodyText: isLightMode ? 'text-gray-700' : 'text-gray-300',
     constraintBg: isLightMode ? 'bg-gray-50 border-gray-200 text-gray-600' : 'bg-white/5 border-white/5 text-gray-400',
-    tcBg: isLightMode ? 'bg-gray-50 border-gray-200 hover:border-violet-300' : 'bg-white/5 border-white/5 hover:border-violet-500/30',
+    tcBg: isLightMode ? 'bg-gray-50 border-gray-200 hover:border-brand-300' : 'bg-white/5 border-white/5 hover:border-brand-500/30',
     tcInnerBg: isLightMode ? 'bg-white border-gray-200 text-gray-800' : 'bg-black/40 border-white/5 text-gray-300',
-    tcOutputBg: isLightMode ? 'bg-white border-gray-200 text-green-700' : 'bg-black/40 border-white/5 text-green-300/90',
-    badge: isLightMode ? 'bg-violet-100 text-violet-700 border-violet-200' : 'bg-violet-500/10 text-violet-300 border-violet-500/20',
-    tcLabelInput: isLightMode ? 'text-violet-600' : 'text-violet-400/80',
-    tcLabelOutput: isLightMode ? 'text-green-600' : 'text-green-400/80',
+    tcOutputBg: isLightMode ? 'bg-white border-gray-200 text-brand-700' : 'bg-black/40 border-white/5 text-brand-300/90',
+    badge: isLightMode ? 'bg-brand-100 text-brand-700 border-brand-200' : 'bg-brand-500/10 text-brand-300 border-brand-500/20',
+    tcLabelInput: isLightMode ? 'text-brand-600' : 'text-brand-400/80',
+    tcLabelOutput: isLightMode ? 'text-brand-600' : 'text-brand-400/80',
   };
 
   return (

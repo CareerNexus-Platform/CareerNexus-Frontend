@@ -157,15 +157,15 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(26, 21, 40, 0.4); 
+  background: rgba(26, 21, 40, 0.4);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.3); 
+  background: rgba(139, 92, 246, 0.3);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.6); 
+  background: rgba(139, 92, 246, 0.6);
 }

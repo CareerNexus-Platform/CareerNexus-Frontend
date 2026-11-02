@@ -3,7 +3,9 @@ import ReactDOM from "react-dom";
 import { FaTimes, FaFileUpload, FaCloudUploadAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import requestApi from "../../services/request";
+import { apiErrorMessage } from "../../services/apiConfig";
 import getuserId from "../../services/getUserId";
+import useDialog from '../../hooks/useDialog';
 
 const branches = [
   "CSE",
@@ -19,6 +21,7 @@ const branches = [
 ];
 
 const ShareResource = ({ onShare, onClose }) => {
+  const dialogRef = useDialog(true, onClose);
   const userId = getuserId();
   const [formData, setFormData] = useState({
     year: "",
@@ -63,8 +66,8 @@ const ShareResource = ({ onShare, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.subject || !formData.pdfFile) {
-      toast.error("Please enter subject and upload a PDF.", {
+    if (!formData.subject.trim() || (!formData.pdfFile && !formData.videoLink.trim())) {
+      toast.error("Enter a subject and add a PDF or a resource link.", {
         id: "missing-fields",
       });
       return;
@@ -75,7 +78,7 @@ const ShareResource = ({ onShare, onClose }) => {
 
       const uploadData = new FormData();
 
-      uploadData.append("file", formData.pdfFile);
+      if (formData.pdfFile) uploadData.append("file", formData.pdfFile);
       uploadData.append("title", formData.subject);
       uploadData.append("description", formData.description);
       uploadData.append("year", formData.year);
@@ -106,7 +109,7 @@ const ShareResource = ({ onShare, onClose }) => {
       onClose(); // Close modal after success
     } catch (error) {
       console.error("Upload failed:", error);
-      toast.error(error.response?.data || "Failed to upload resource.", {
+      toast.error(apiErrorMessage(error, "Failed to upload resource."), {
         id: "upload-error",
       });
     } finally {
@@ -115,7 +118,7 @@ const ShareResource = ({ onShare, onClose }) => {
   };
 
   const inputClasses =
-    "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
+    "w-full bg-white/60 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-brand-400 focus:border-transparent outline-none p-2.5 transition-all hover:bg-white/90 shadow-sm backdrop-blur-md";
 
   const modalContent = (
     <div
@@ -127,11 +130,11 @@ const ShareResource = ({ onShare, onClose }) => {
       onDragLeave={() => setDragActive(false)}
       onDrop={handleDrop}
     >
-      <div className="bg-white/80 backdrop-blur-2xl border border-white/50 rounded-3xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto scrollbar-hide relative flex flex-col font-poppins">
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Share academic resource" tabIndex={-1} className="cn-dialog bg-white/80 backdrop-blur-2xl border border-white/50 rounded-3xl shadow-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto scrollbar-hide relative flex flex-col font-poppins">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-5 border-b border-gray-200/50 sticky top-0 bg-white/70 backdrop-blur-xl z-20">
           <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-purple-700 to-indigo-600 bg-clip-text text-transparent">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-brand-700 to-brand-600 bg-clip-text text-transparent">
               Share Academic Resource
             </h2>
             <p className="text-xs text-gray-500 mt-1">
@@ -140,6 +143,7 @@ const ShareResource = ({ onShare, onClose }) => {
           </div>
           <button
             onClick={onClose}
+            aria-label="Close resource form"
             className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2.5 rounded-full transition-all"
           >
             <FaTimes size={18} />
@@ -154,7 +158,7 @@ const ShareResource = ({ onShare, onClose }) => {
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
                 Year
               </label>
-              <select
+              <select aria-label="year"
                 name="year"
                 onChange={handleChange}
                 value={formData.year}
@@ -181,7 +185,7 @@ const ShareResource = ({ onShare, onClose }) => {
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
                 Semester
               </label>
-              <select
+              <select aria-label="semester"
                 name="semester"
                 onChange={handleChange}
                 value={formData.semester}
@@ -203,7 +207,7 @@ const ShareResource = ({ onShare, onClose }) => {
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
                 Regulation
               </label>
-              <select
+              <select aria-label="regulation"
                 name="regulation"
                 onChange={handleChange}
                 value={formData.regulation}
@@ -220,7 +224,7 @@ const ShareResource = ({ onShare, onClose }) => {
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
                 Branch
               </label>
-              <select
+              <select aria-label="branch"
                 name="branch"
                 onChange={handleChange}
                 value={formData.branch}
@@ -243,7 +247,7 @@ const ShareResource = ({ onShare, onClose }) => {
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
                 Subject Name
               </label>
-              <input
+              <input aria-label="subject"
                 name="subject"
                 type="text"
                 value={formData.subject}
@@ -256,9 +260,9 @@ const ShareResource = ({ onShare, onClose }) => {
 
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
-                Video / Drive Link (Optional)
+                Video / Drive Link
               </label>
-              <input
+              <input aria-label="video Link"
                 name="videoLink"
                 type="text"
                 value={formData.videoLink}
@@ -273,7 +277,7 @@ const ShareResource = ({ onShare, onClose }) => {
             <label className="text-xs font-semibold text-gray-600 uppercase ml-1">
               Description (Optional)
             </label>
-            <textarea
+            <textarea aria-label="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
@@ -287,8 +291,8 @@ const ShareResource = ({ onShare, onClose }) => {
           <div
             className={`w-full border-2 border-dashed ${
               dragActive
-                ? "border-purple-500 bg-purple-50/80 scale-[1.01]"
-                : "border-gray-300 bg-white/50 hover:bg-white/80 hover:border-purple-300"
+                ? "border-brand-500 bg-brand-50/80 scale-[1.01]"
+                : "border-gray-300 bg-white/50 hover:bg-white/80 hover:border-brand-300"
             } rounded-2xl h-24 flex flex-col items-center justify-center transition-all cursor-pointer`}
           >
             <label
@@ -297,21 +301,21 @@ const ShareResource = ({ onShare, onClose }) => {
             >
               {formData.pdfFile ? (
                 <div className="flex flex-col items-center gap-1">
-                  <div className="bg-green-100 p-2 rounded-full text-green-600 shadow-sm">
+                  <div className="bg-brand-100 p-2 rounded-full text-brand-600 shadow-sm">
                     <FaCloudUploadAlt size={20} />
                   </div>
-                  <span className="text-green-700 font-semibold text-sm truncate max-w-full">
+                  <span className="text-brand-700 font-semibold text-sm truncate max-w-full">
                     {formData.pdfFile.name}
                   </span>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1.5 text-gray-500">
-                  <div className="bg-purple-100 p-2 rounded-full text-purple-600 shadow-sm transition-transform">
+                  <div className="bg-brand-100 p-2 rounded-full text-brand-600 shadow-sm transition-transform">
                     <FaCloudUploadAlt size={20} />
                   </div>
                   <p className="text-sm font-medium">
                     Drag & Drop PDF or{" "}
-                    <span className="text-purple-600 underline decoration-purple-300">
+                    <span className="text-brand-600 underline decoration-brand-300">
                       Browse
                     </span>
                   </p>
@@ -332,7 +336,7 @@ const ShareResource = ({ onShare, onClose }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2"
+            className="w-full bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 text-white font-semibold py-3.5 rounded-xl shadow hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2"
           >
             {isLoading ? (
               <svg

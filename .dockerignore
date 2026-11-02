@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.git/
+.gitignore
+.firebaserc
+.firebase/
+firebase.json
+.antigravityignore
+Dockerfile
+nginx.conf
+docker-compose.yml
+.env
