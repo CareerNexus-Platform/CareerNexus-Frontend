@@ -2,18 +2,18 @@ import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
-  Compass,
   Inbox,
   BriefcaseBusiness,
   Code2,
   Route,
 } from "lucide-react";
+import NexusLogo from "./NexusLogo";
 
-export function Brand({ to = "/", compact = false }) {
+export function Brand({ to = "/", compact = false, light = false }) {
   return (
     <Link to={to} className="cn-brand" aria-label="CareerNexus home">
       <span className="cn-brand-mark">
-        <Compass size={22} strokeWidth={2.3} />
+        <NexusLogo className="w-6 h-auto" light={light} />
       </span>
       {!compact && (
         <span>

@@ -35,9 +35,9 @@ const NavbarLanding = () => {
           className="flex items-center gap-3 cursor-pointer"
         >
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="Logo"
-            className="h-10 w-10 drop-shadow-[0_0_12px_rgba(65, 45, 32,0.5)]"
+            className="h-9 w-auto"
           />
           <span className="text-white text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]">
             CareerNexus

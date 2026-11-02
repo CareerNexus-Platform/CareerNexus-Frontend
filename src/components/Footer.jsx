@@ -22,9 +22,9 @@ const Footer = () => {
         {/* Logo & Branding */}
         <div className="flex items-center gap-3">
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="CareerNexus Logo"
-            className="h-8 w-8 drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]"
+            className="h-8 w-auto"
           />
           <span className="text-xl font-semibold tracking-wide drop-shadow-[0_0_8px_rgba(65, 45, 32,0.5)]">
             CareerNexus

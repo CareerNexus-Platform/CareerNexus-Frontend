@@ -22,9 +22,9 @@ const NavbarTPO = () => {
         {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3">
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="CareerNexus Logo"
-            className="h-10 w-10 drop-shadow-[0_0_12px_rgba(65, 45, 32,0.6)]"
+            className="h-9 w-auto"
           />
           <span className="text-white text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]">
             CareerNexus

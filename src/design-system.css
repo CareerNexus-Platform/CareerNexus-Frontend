@@ -118,10 +118,11 @@ svg {
   height: 37px;
   width: 37px;
   border-radius: 12px;
-  background: var(--cn-accent);
-  color: white;
+  background: var(--cn-paper);
+  border: 1px solid var(--cn-line);
   display: grid;
   place-items: center;
+  padding: 5px;
 }
 .cn-brand-accent {
   color: var(--cn-accent);

@@ -22,9 +22,9 @@ const NavbarStudent = () => {
         {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3 group">
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="CareerNexus Logo"
-            className="h-9 w-9 sm:h-10 sm:w-10 drop-shadow-[0_0_12px_rgba(65, 45, 32,0.6)] transition-transform group-hover:translate-y-[-1px]"
+            className="h-9 w-auto transition-transform group-hover:translate-y-[-1px]"
           />
           <span className="text-white text-xl sm:text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]">
             CareerNexus
