@@ -1,0 +1,51 @@
+# =============================================================================
+# .dockerignore — CareerNexus Frontend
+# Keeps the Docker build context lean and prevents secrets from leaking
+# =============================================================================
+
+# Node dependencies (rebuilt inside the container)
+node_modules/
+
+# Vite build output (rebuilt inside the container)
+dist/
+
+# Environment files — NEVER bake real secrets into the image!
+# Pass VITE_* variables as --build-arg at build time instead.
+.env
+.env.*
+!.env.example
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# IDE / editor artefacts
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Firebase
+.firebaserc
+firebase.json
+.firebase/
+
+# Antigravity / CI helpers (not needed in the image)
+.antigravityignore
+
+# Docker-related files (not needed inside the image itself)
+docker-compose.yml
+docker-compose*.yml
+DOCKER_DEPLOY.md
+
+# Logs
+*.log
+npm-debug.log*

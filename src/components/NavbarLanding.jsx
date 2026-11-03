@@ -20,11 +20,11 @@ const NavbarLanding = () => {
   ];
 
   const linkClass =
-    "cursor-pointer text-white hover:text-violet-400 transition duration-300 font-poppins tracking-wide";
-  const activeClass = "text-violet-400 underline underline-offset-4";
+    "cursor-pointer text-white hover:text-brand-400 transition duration-300 font-poppins tracking-wide";
+  const activeClass = "text-brand-400 underline underline-offset-4";
 
   return (
-    <nav className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] fixed top-0 left-0 z-50 shadow-xl">
+    <nav className="w-full bg-gradient-to-r from-ink via-ink to-ink fixed top-0 left-0 z-50 shadow-xl">
       <div className="max-w-auto  px-6 py-4 flex items-center justify-between">
         {/* 🔹 Logo */}
         <ScrollLink
@@ -35,11 +35,11 @@ const NavbarLanding = () => {
           className="flex items-center gap-3 cursor-pointer"
         >
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="Logo"
-            className="h-10 w-10 drop-shadow-[0_0_12px_rgba(165,100,255,0.5)]"
+            className="h-9 w-auto"
           />
-          <span className="text-white text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(165,100,255,0.6)]">
+          <span className="text-white text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]">
             CareerNexus
           </span>
         </ScrollLink>
@@ -85,7 +85,7 @@ const NavbarLanding = () => {
 
       {/* 📱 Mobile Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 w-full bg-[#0f0c1d] border-t border-violet-500/20 px-6 py-4 space-y-4 text-base text-white shadow-xl z-50">
+        <div className="absolute top-full left-0 w-full bg-ink border-t border-brand-500/20 px-6 py-4 space-y-4 text-base text-white shadow-xl z-50">
           {scrollLinks.map((link) => (
             <ScrollLink
               key={link.to}

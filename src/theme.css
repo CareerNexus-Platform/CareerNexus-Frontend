@@ -1,0 +1,282 @@
+/* Shared experience tokens for every role, public page, and assessment. */
+:root {
+  --cn-bg: #f7f6f5;
+  --cn-paper: #faf9f7;
+  --cn-surface: #fff;
+  --cn-ink: #292827;
+  --cn-muted: #686460;
+  --cn-line: #e5e2df;
+  --cn-accent: #b35432;
+  --cn-accent-dark: #913e25;
+  --cn-accent-soft: #f7ede7;
+  --cn-space-page: clamp(20px, 2.5vw, 36px);
+  --cn-space-section: 24px;
+  --cn-space-card: clamp(20px, 2vw, 28px);
+  --cn-radius: 12px;
+  --cn-shadow: 0 4px 18px rgb(41 40 39 / 4%);
+  --cn-motion-fast: 160ms;
+  --cn-motion-enter: 260ms;
+  --cn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+  color: var(--cn-ink);
+  background: var(--cn-bg);
+}
+::selection {
+  color: var(--cn-ink);
+  background: #edd1c3;
+}
+:focus-visible {
+  outline: 2px solid var(--cn-accent);
+  outline-offset: 3px;
+}
+
+/* Keep navigation and data surfaces identical between workspaces. */
+.cn-sidebar {
+  background: #252423;
+}
+.cn-topbar,
+.cn-panel,
+.cn-stat,
+.cn-action-card,
+.cn-dropdown,
+.cn-workspace .cn-dialog {
+  background: var(--cn-surface);
+  border-color: var(--cn-line);
+}
+.cn-page-heading h1,
+.cn-section-heading h2,
+.cn-stat > strong,
+.cn-profile-text strong {
+  color: var(--cn-ink);
+}
+.cn-page-description,
+.cn-stat-top,
+.cn-stat > p,
+.cn-empty p,
+.cn-prepare-panel > p,
+.cn-today {
+  color: var(--cn-muted);
+}
+.cn-text-link {
+  color: var(--cn-accent-dark);
+}
+.cn-icon-tile {
+  background: #f2efeb;
+  color: #77675b;
+}
+.cn-button {
+  background: var(--cn-accent);
+}
+.cn-button:hover {
+  background: var(--cn-accent-dark);
+}
+.cn-button-white,
+.cn-button-light {
+  color: var(--cn-accent-dark);
+  background: white;
+}
+.cn-button-white:hover,
+.cn-button-light:hover {
+  background: var(--cn-accent-soft);
+}
+
+/* Content uses a common gutter and rhythm, rather than navbar-sized top gaps. */
+.cn-workspace .cn-data-page {
+  min-height: calc(100dvh - 76px);
+  background: var(--cn-bg);
+}
+.cn-workspace .cn-data-page > :is(main, .flex-grow, [class*="pt-"]) {
+  padding: var(--cn-space-page);
+  max-width: 1440px;
+  width: 100%;
+  margin-inline: auto;
+}
+.cn-workspace .cn-data-page:is([class*="pt-"], [class*="px-"]) {
+  padding: var(--cn-space-page);
+}
+.cn-workspace .cn-data-page > .space-y-10,
+.cn-workspace .cn-data-page > .space-y-8 {
+  --cn-space-section: 24px;
+}
+.cn-workspace
+  .cn-data-page
+  :is(.space-y-10, .space-y-8)
+  > :not([hidden])
+  ~ :not([hidden]) {
+  margin-top: var(--cn-space-section);
+}
+.cn-workspace .cn-data-page > .flex-grow > [class*="shadow-xl"] {
+  padding: var(--cn-space-card);
+}
+.cn-workspace :is(.cn-panel, .cn-stat) {
+  padding: var(--cn-space-card);
+}
+.cn-workspace .cn-form-page {
+  min-height: calc(100dvh - 76px);
+  padding: var(--cn-space-page);
+  align-items: flex-start;
+}
+.cn-workspace .cn-form-page > div {
+  margin-inline: auto;
+}
+.cn-workspace .cn-form-page .cn-admin-form-header.bg-gradient-to-r {
+  background: white;
+  color: var(--cn-ink);
+  border-bottom: 1px solid var(--cn-line);
+}
+.cn-workspace .cn-admin-form-header :is(p, button) {
+  color: var(--cn-muted);
+}
+.cn-workspace .cn-admin-form-header > div {
+  background: var(--cn-accent-soft);
+  color: var(--cn-accent);
+  box-shadow: none;
+}
+.cn-workspace [class*="border-brand-100"] {
+  border-color: var(--cn-line);
+}
+.cn-workspace [class*="bg-brand-50"] {
+  background-color: var(--cn-paper);
+}
+.cn-workspace .cn-form-page :is(.p-10, .sm\:p-10) {
+  padding: var(--cn-space-card);
+}
+.cn-workspace .cn-profile-page > .flex-grow {
+  padding-top: 24px;
+  padding-bottom: 32px;
+}
+.cn-workspace .cn-profile-layout {
+  gap: 24px;
+}
+.cn-workspace .cn-profile-layout > div > [class*="p-8"] {
+  padding: var(--cn-space-card);
+}
+.cn-workspace .cn-profile-accent {
+  background: #eeebe7;
+}
+
+/* Shared control geometry and legible labels in every feature form. */
+:is(.cn-workspace, .cn-public)
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+:is(.cn-workspace, .cn-public) select,
+:is(.cn-workspace, .cn-public) textarea {
+  border: 1px solid var(--cn-line);
+  border-radius: 10px;
+  font-size: 14px;
+  min-height: 44px;
+  color: var(--cn-ink);
+  background: white;
+}
+:is(.cn-workspace, .cn-public) input:focus,
+:is(.cn-workspace, .cn-public) select:focus,
+:is(.cn-workspace, .cn-public) textarea:focus {
+  border-color: var(--cn-accent) !important;
+  box-shadow: 0 0 0 3px rgb(179 84 50 / 12%) !important;
+}
+.cn-workspace :is(label.text-gray-400, label.text-gray-500) {
+  color: var(--cn-muted);
+}
+.cn-workspace th {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 14px 18px;
+}
+.cn-workspace td {
+  padding: 16px 18px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.cn-workspace :is(button, a)[class*="py-3"] {
+  min-height: 44px;
+}
+.cn-workspace .cn-dialog {
+  border-radius: 16px;
+  padding: var(--cn-space-card);
+}
+.cn-workspace .cn-dialog :is(h2, h3) {
+  line-height: 1.3;
+}
+.cn-workspace .cn-form-page label:has(input[type="radio"]:focus-visible) {
+  outline: 2px solid var(--cn-accent);
+  outline-offset: 3px;
+}
+
+/* Short, consistent feedback. No layout changes on hover. */
+:is(.cn-workspace, .cn-public, .cn-focus)
+  :is(button, a, input, select, textarea) {
+  transition-duration: var(--cn-motion-fast);
+  transition-timing-function: var(--cn-ease);
+}
+:is(.cn-workspace, .cn-public) .transition-all {
+  transition-property:
+    color, background-color, border-color, box-shadow, opacity, transform;
+}
+.cn-panel,
+.cn-stat,
+.cn-action-card,
+.cn-quick-link {
+  transition:
+    border-color var(--cn-motion-fast),
+    box-shadow var(--cn-motion-fast),
+    transform var(--cn-motion-fast) var(--cn-ease);
+}
+@media (hover: hover) {
+  .cn-action-card:hover,
+  .cn-quick-link:hover {
+    transform: translateY(-2px);
+    border-color: #d3b4a4;
+  }
+}
+.cn-workspace .cn-stat:hover {
+  transform: none;
+}
+.cn-dropdown {
+  animation: cn-surface-enter var(--cn-motion-enter) var(--cn-ease) both;
+}
+@keyframes cn-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --cn-space-page: 18px;
+    --cn-space-card: 20px;
+    --cn-space-section: 20px;
+  }
+  .cn-workspace .cn-data-page > :is(main, .flex-grow) {
+    padding-inline: 18px;
+  }
+  .cn-workspace .cn-profile-layout {
+    gap: 20px;
+  }
+  .cn-workspace .cn-form-page .p-10 {
+    padding: 24px 20px;
+  }
+  .cn-workspace :is(.cn-page-heading, .cn-section-heading) {
+    gap: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cn-action-card:hover,
+  .cn-quick-link:hover {
+    transform: none;
+  }
+}

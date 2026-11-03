@@ -16,11 +16,11 @@ const NavbarStudent = () => {
   ];
 
   const linkClass =
-    "cursor-pointer hover:text-violet-400 transition duration-300 font-poppins";
-  const activeClass = "text-violet-400 underline underline-offset-4";
+    "cursor-pointer hover:text-brand-400 transition duration-300 font-poppins";
+  const activeClass = "text-brand-400 underline underline-offset-4";
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#0f0c1d] via-[#1b1433] to-[#0f0c1d] shadow-md">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-ink via-ink to-ink shadow-md">
       <div className="max-w-auto  flex items-center justify-between px-4 sm:px-8 lg:px-12 py-4">
         
         
@@ -30,11 +30,11 @@ const NavbarStudent = () => {
                             {/* 🔹 Logo */}
         <NavLink to="/" className="flex items-center gap-3 group">
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="CareerNexus Logo"
-            className="h-9 w-9 sm:h-10 sm:w-10 drop-shadow-[0_0_12px_rgba(165,100,255,0.6)] transition-transform group-hover:scale-105"
+            className="h-9 w-auto transition-transform group-hover:translate-y-[-1px]"
           />
-          <span className="text-white text-xl sm:text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(165,100,255,0.6)]">
+          <span className="text-white text-xl sm:text-2xl font-poppins font-semibold tracking-wider drop-shadow-[0_0_8px_rgba(65, 45, 32,0.6)]">
             CareerNexus
           </span>
         </NavLink>
@@ -65,13 +65,13 @@ const NavbarStudent = () => {
           {/* Login/Signup */}
           <NavLink
             to="/student/login"
-            className="px-4 py-2 rounded-md border border-violet-400 text-white bg-white/10 hover:bg-violet-500 hover:text-white shadow-[0_0_10px_rgba(165,100,255,0.4)] hover:shadow-[0_0_20px_rgba(165,100,255,0.6)] transition"
+            className="px-4 py-2 rounded-md border border-brand-400 text-white bg-white/10 hover:bg-brand-500 hover:text-white shadow-[0_0_10px_rgba(65, 45, 32,0.4)] hover:shadow-[0_0_20px_rgba(65, 45, 32,0.6)] transition"
           >
             Login
           </NavLink>
           <NavLink
             to="/student/signup"
-            className="px-4 py-2 rounded-md bg-gradient-to-r from-violet-500 to-indigo-600 text-white font-semibold shadow-[0_0_12px_rgba(165,100,255,0.6)] hover:shadow-[0_0_20px_rgba(165,100,255,0.8)] transition"
+            className="px-4 py-2 rounded-md bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold shadow-[0_0_12px_rgba(65, 45, 32,0.6)] hover:shadow-[0_0_20px_rgba(65, 45, 32,0.8)] transition"
           >
             Signup
           </NavLink>
@@ -89,7 +89,7 @@ const NavbarStudent = () => {
 
       {/* 📱 Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-[#0f0c1d] px-6 py-4 space-y-4 text-white text-base font-poppins border-t border-violet-500/20 shadow-md">
+        <div className="md:hidden bg-ink px-6 py-4 space-y-4 text-white text-base font-poppins border-t border-brand-500/20 shadow-md">
           {scrollLinks.map((link) => (
             <ScrollLink
               key={link.to}
@@ -110,14 +110,14 @@ const NavbarStudent = () => {
             <NavLink
               to="/student/login"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 rounded-md bg-white/10 border border-violet-400 hover:bg-violet-500 hover:text-white shadow-[0_0_12px_rgba(165,100,255,0.6)] transition"
+              className="px-4 py-2 rounded-md bg-white/10 border border-brand-400 hover:bg-brand-500 hover:text-white shadow-[0_0_12px_rgba(65, 45, 32,0.6)] transition"
             >
               Login
             </NavLink>
             <NavLink
               to="/student/signup"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 rounded-md bg-gradient-to-r from-violet-500 to-indigo-600 text-white font-semibold shadow-[0_0_14px_rgba(165,100,255,0.6)] transition"
+              className="px-4 py-2 rounded-md bg-gradient-to-r from-brand-500 to-brand-600 text-white font-semibold shadow-[0_0_14px_rgba(65, 45, 32,0.6)] transition"
             >
               Signup
             </NavLink>

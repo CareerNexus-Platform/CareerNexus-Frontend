@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/request';
@@ -19,8 +19,8 @@ const CODE_TEMPLATES = {
 
 const DEFAULT_START_MESSAGE = "// Start coding...\n// Happy Coding!";
 
-const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initialTheme = "vs-dark", question: externalQuestion, onCodeChange, onLanguageChange, onThemeBrightnessChange }) => {
-    const [code, setCode] = useState(CODE_TEMPLATES[initialLanguage] || DEFAULT_START_MESSAGE);
+const CodeEditor = ({ sessionId, initialCode, initialLanguage = "javascript", initialTheme = "vs-dark", question: externalQuestion, onCodeChange, onLanguageChange, onThemeBrightnessChange }) => {
+    const [code, setCode] = useState(initialCode ?? CODE_TEMPLATES[initialLanguage] ?? DEFAULT_START_MESSAGE);
     const [selectedLanguage, setSelectedLanguage] = useState(initialLanguage);
     const [selectedTheme, setSelectedTheme] = useState(initialTheme);
     const [executionOutput, setExecutionOutput] = useState("");
@@ -31,8 +31,8 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
     const isLightMode = selectedTheme.includes('light');
 
     const themeStyles = {
-        panel: isLightMode ? 'bg-white/95 border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.05)] hover:border-violet-400 hover:shadow-[0_0_25px_rgba(139,92,246,0.15)] text-gray-900' : 'bg-[#0a0614]/60 border-violet-500/20 shadow-[0_0_20px_rgba(139,92,246,0.05)] hover:border-violet-500/40 hover:shadow-[0_0_25px_rgba(139,92,246,0.1)] text-gray-200',
-        header: isLightMode ? 'bg-gray-100/50 border-gray-200 text-violet-700' : 'bg-white/5 border-violet-500/20 text-violet-300',
+        panel: isLightMode ? 'bg-white/95 border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.05)] hover:border-brand-400 hover:shadow-[0_0_25px_rgba(65, 45, 32,0.15)] text-gray-900' : 'bg-ink/60 border-brand-500/20 shadow-[0_0_20px_rgba(65, 45, 32,0.05)] hover:border-brand-500/40 hover:shadow-[0_0_25px_rgba(65, 45, 32,0.1)] text-gray-200',
+        header: isLightMode ? 'bg-gray-100/50 border-gray-200 text-brand-700' : 'bg-white/5 border-brand-500/20 text-brand-300',
         textarea: isLightMode ? 'text-gray-900 placeholder-gray-400' : 'text-gray-300 placeholder-gray-500/50',
         fileText: isLightMode ? 'text-gray-700' : 'text-gray-300'
     };
@@ -75,7 +75,7 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                 } else {
                     setQuestion(null);
                 }
-            } catch (error) {
+            } catch {
                 setQuestion(null);
             }
         };
@@ -212,13 +212,13 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                         {/* Editor Tab Header */}
                         <div className={`border-b px-4 py-2.5 flex items-center justify-between z-10 shrink-0 ${themeStyles.header}`}>
                             <div className="flex items-center gap-3">
-                                <span className={`w-2.5 h-2.5 rounded-full ${selectedLanguage === 'python' ? 'bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]' : selectedLanguage === 'javascript' ? 'bg-yellow-300 shadow-[0_0_8px_rgba(253,224,71,0.8)]' : selectedLanguage === 'cpp' || selectedLanguage === 'c' ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]' : 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.8)]'}`}></span>
+                                <span className={`w-2.5 h-2.5 rounded-full ${selectedLanguage === 'python' ? 'bg-brand-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]' : selectedLanguage === 'javascript' ? 'bg-brand-300 shadow-[0_0_8px_rgba(253,224,71,0.8)]' : selectedLanguage === 'cpp' || selectedLanguage === 'c' ? 'bg-brand-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]' : 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.8)]'}`}></span>
                                 <span className={`text-sm font-semibold tracking-wide font-mono ${themeStyles.fileText}`}>
                                     main.{selectedLanguage === 'python' ? 'py' : selectedLanguage === 'javascript' ? 'js' : selectedLanguage === 'java' ? 'java' : selectedLanguage === 'cpp' ? 'cpp' : 'c'}
                                 </span>
                             </div>
                         </div>
-                        <div className="flex-1 min-h-0 p-1">
+                        <div className="cn-editor-surface flex-1 min-h-0 p-1">
                             <MonacoCodeEditor
                                 code={code}
                                 selectedLanguage={selectedLanguage}
@@ -232,10 +232,11 @@ const CodeEditor = ({ sessionId, username, initialLanguage = "javascript", initi
                     <div className="h-[22vh] md:h-44 flex flex-col md:flex-row gap-4 shrink-0">
                         <div className={`w-full md:w-[40%] flex flex-col rounded-2xl backdrop-blur-xl overflow-hidden transition-all duration-300 border ${themeStyles.panel}`}>
                             <div className={`px-4 py-3 text-sm font-semibold border-b flex items-center gap-2 shrink-0 ${themeStyles.header}`}>
-                                <span className="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.8)]"></span>
+                                <span className="w-2 h-2 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(65, 45, 32,0.8)]"></span>
                                 Custom Input
                             </div>
                             <textarea
+                                aria-label="Custom standard input"
                                 className={`flex-1 w-full bg-transparent p-4 text-sm resize-none outline-none font-mono custom-scrollbar ${themeStyles.textarea}`}
                                 placeholder="Enter custom standard input here..."
                                 value={customInput}

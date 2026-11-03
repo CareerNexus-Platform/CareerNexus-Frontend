@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
 import NavbarStudentDashboard from "../../components/NavbarStudentDashboard";
 import requestApi from "../../services/request";
@@ -26,27 +26,27 @@ const StudentCodingAssessments = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#F8E5EB] via-[#ECEAFE] to-[#D6E6FD] text-[#2C225A] font-poppins">
+    <div className="cn-data-page flex flex-col min-h-screen bg-gradient-to-br from-canvas via-paper to-paper text-ink font-poppins">
       <NavbarStudentDashboard />
       <div className="flex-grow pt-28 pb-16 px-4 max-w-6xl w-full mx-auto">
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-4xl font-extrabold text-[#2F2F5B] mb-2 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-ink mb-2 tracking-tight">
             Coding Practice Tests
           </h1>
-          <p className="text-[#5C5C80] text-lg">
+          <p className="text-muted text-lg">
             Practice coding challenges and improve your skills. These scores are
             for your practice and do not affect job applications.
           </p>
-        </motion.div>
+        </Motion.div>
 
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-violet-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-600"></div>
           </div>
         ) : assessments.length > 0 ? (
           <div className="space-y-4">
@@ -55,26 +55,26 @@ const StudentCodingAssessments = () => {
               const endTime = new Date(test.endTime);
               const now = new Date();
               const isActive = now >= startTime && now <= endTime;
-              const isExpired = now > endTime;
+
               const isFuture = now < startTime;
 
               return (
-                <motion.div
+                <Motion.div
                   key={test.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: Math.min(index, 5) * 0.04 }}
                   className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
                 >
                   {/* Status Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     {isActive ? (
-                      <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{" "}
+                      <span className="bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>{" "}
                         Live
                       </span>
                     ) : isFuture ? (
-                      <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">
+                      <span className="bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full">
                         Upcoming
                       </span>
                     ) : (
@@ -85,7 +85,7 @@ const StudentCodingAssessments = () => {
                   </div>
 
                   {/* Leading Icon */}
-                  <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
+                  <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center text-2xl group-hover:rotate-12 transition-transform shrink-0">
                     🚀
                   </div>
 
@@ -93,11 +93,11 @@ const StudentCodingAssessments = () => {
                   {/* Main Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-bold text-[#2F2F5B] truncate">
+                      <h3 className="text-lg font-bold text-ink truncate">
                         {test.assessmentName}
                       </h3>
                       {test.solved && (
-                        <span className="bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="bg-brand-100 text-brand-700 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
                           Solved
                         </span>
                       )}
@@ -105,11 +105,11 @@ const StudentCodingAssessments = () => {
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
                       <div className="flex items-center gap-1.5 font-medium">
-                        <FaCalendarAlt className="text-violet-500" />
+                        <FaCalendarAlt className="text-brand-500" />
                         {startTime.toLocaleDateString()}
                       </div>
                       <div className="flex items-center gap-1.5 font-medium">
-                        <FaClock className="text-violet-500" />
+                        <FaClock className="text-brand-500" />
                         {startTime.toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -131,7 +131,7 @@ const StudentCodingAssessments = () => {
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                         Highest Score
                       </span>
-                      <div className="text-lg font-black text-violet-600">
+                      <div className="text-lg font-black text-brand-600">
                         {test.highestScore}{" "}
                         <span className="text-xs text-gray-300 font-normal">
                           / {test.maxScore}
@@ -150,13 +150,13 @@ const StudentCodingAssessments = () => {
                       ) : (
                         <Link
                           to={`/student/${userId}/coding-assessment/${test.id}`}
-                          className="w-full md:w-40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
+                          className="w-full md:w-40 bg-gradient-to-r from-brand-600 to-brand-600 text-white text-sm font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg hover:brightness-110 transition"
                         >
                           Start Now <FaChevronRight className="text-[10px]" />
                         </Link>
                       )
                     ) : isFuture ? (
-                      <div className="w-full md:w-40 bg-blue-50 text-blue-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-blue-100">
+                      <div className="w-full md:w-40 bg-brand-50 text-brand-600 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border border-brand-100">
                         Upcoming
                       </div>
                     ) : (
@@ -168,23 +168,23 @@ const StudentCodingAssessments = () => {
 
                   {/* Mobile score display */}
                   {test.solved && test.highestScore !== null && (
-                    <div className="md:hidden flex items-center gap-2 text-xs bg-violet-50 px-3 py-1 rounded-full border border-violet-100">
-                      <span className="text-violet-400 font-bold uppercase tracking-widest">
+                    <div className="md:hidden flex items-center gap-2 text-xs bg-brand-50 px-3 py-1 rounded-full border border-brand-100">
+                      <span className="text-brand-400 font-bold uppercase tracking-widest">
                         Score:
                       </span>
-                      <span className="font-black text-violet-700">
+                      <span className="font-black text-brand-700">
                         {test.highestScore} / {test.maxScore}
                       </span>
                     </div>
                   )}
-                </motion.div>
+                </Motion.div>
               );
             })}
           </div>
         ) : (
           <div className="bg-white/60 backdrop-blur-md rounded-3xl p-16 text-center border border-dashed border-gray-300">
             <div className="text-6xl mb-6">📝</div>
-            <h2 className="text-2xl font-bold text-[#2F2F5B] mb-2">
+            <h2 className="text-2xl font-bold text-ink mb-2">
               No Practice Tests
             </h2>
             <p className="text-gray-500">
@@ -196,8 +196,8 @@ const StudentCodingAssessments = () => {
       </div>
 
       {/* 📍 Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#130c22] via-[#1b1435] to-[#0f0c1d] border-t border-violet-500/20 py-8 mt-auto">
-        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-[#EADFFD] space-y-2 font-outfit">
+      <footer className="w-full bg-gradient-to-r from-ink via-ink to-ink border-t border-brand-500/20 py-8 mt-auto">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-16 text-center text-paper space-y-2 font-outfit">
           <p className="text-sm sm:text-base opacity-90">
             &copy; {new Date().getFullYear()} CareerNexus. All rights reserved.
           </p>

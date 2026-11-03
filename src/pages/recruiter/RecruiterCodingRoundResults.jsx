@@ -1,8 +1,9 @@
+import { apiErrorMessage } from "../../services/apiConfig";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarRecruiterDashboard from "../../components/NavbarRecruiterDashboard";
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaHourglassHalf } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import requestApi from "../../services/request";
 
 const RecruiterCodingRoundResults = () => {
@@ -12,23 +13,20 @@ const RecruiterCodingRoundResults = () => {
   const [passed, setPassed] = useState([]);
   const [failed, setFailed] = useState([]);
   const [pending, setPending] = useState([]);
+  const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [passedRes, failedRes, pendingRes] = await Promise.all([
-          requestApi.get(`/exam/recruiter/round/${assessmentId}/students/passed`),
-          requestApi.get(`/exam/recruiter/round/${assessmentId}/students/failed`),
-          requestApi.get(`/exam/recruiter/round/${assessmentId}/students/pending`),
-        ]);
-
-        setPassed(passedRes.data || []);
-        setFailed(failedRes.data || []);
-        setPending(pendingRes.data || []);
+        setLoadError("");
+        const { data } = await requestApi.get(`/coding-exam/${assessmentId}/results`);
+        setPassed(data.passed || []);
+        setFailed(data.failed || []);
+        setPending(data.pending || []);
       } catch (err) {
-        console.error("Failed to load coding round results", err);
+        setLoadError(apiErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -54,17 +52,14 @@ const RecruiterCodingRoundResults = () => {
 
   return (
     <>
-
-                  
-                  
-                  
-                  <NavbarRecruiterDashboard />
-      <div className="pt-20 px-4 pb-12 min-h-screen bg-white font-poppins text-gray-800">
+      <NavbarRecruiterDashboard />
+      <div className="cn-data-page pt-20 px-4 pb-12 min-h-screen bg-white font-poppins text-gray-800">
+        {loadError && <div role="alert" className="cn-inline-notice mb-6">{loadError}</div>}
         {/* Back button */}
         <div className="max-w-6xl mx-auto mb-6">
           <button
             onClick={handleBack}
-            className="group flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-purple-300 rounded-full text-gray-500 hover:text-purple-600 shadow-sm hover:shadow transition-all duration-300 text-sm"
+            className="group flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-brand-300 rounded-full text-gray-500 hover:text-brand-600 shadow-sm hover:shadow transition-all duration-300 text-sm"
           >
             <FaArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
             Back to Recruitment Process
@@ -73,7 +68,7 @@ const RecruiterCodingRoundResults = () => {
 
         <div className="max-w-6xl mx-auto space-y-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-purple-700">
+            <h1 className="text-2xl md:text-3xl font-bold text-brand-700">
               Coding Round Results
             </h1>
             <p className="text-xs md:text-sm text-gray-500 mt-1">
@@ -86,17 +81,17 @@ const RecruiterCodingRoundResults = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Passed */}
-              <motion.div
+              <Motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-green-50 border border-green-100 rounded-xl p-4 shadow-sm col-span-1 md:col-span-1"
+                className="bg-brand-50 border border-brand-100 rounded-xl p-4 shadow-sm col-span-1 md:col-span-1"
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <FaCheckCircle className="text-green-600" />
-                  <h2 className="font-semibold text-sm md:text-base text-green-700">
+                  <FaCheckCircle className="text-brand-600" />
+                  <h2 className="font-semibold text-sm md:text-base text-brand-700">
                     Passed (Qualified)
                   </h2>
-                  <span className="ml-auto text-xs font-bold bg-white/70 text-green-700 px-2 py-0.5 rounded-full">
+                  <span className="ml-auto text-xs font-bold bg-white/70 text-brand-700 px-2 py-0.5 rounded-full">
                     {passed.length}
                   </span>
                 </div>
@@ -117,10 +112,10 @@ const RecruiterCodingRoundResults = () => {
                     </table>
                   </div>
                 )}
-              </motion.div>
+              </Motion.div>
 
-                                {/* Failed */}
-              <motion.div
+              {/* Failed */}
+              <Motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-red-50 border border-red-100 rounded-xl p-4 shadow-sm col-span-1 md:col-span-1"
@@ -151,23 +146,20 @@ const RecruiterCodingRoundResults = () => {
                     </table>
                   </div>
                 )}
-              </motion.div>
+              </Motion.div>
 
-                              
-                              
-                              
-                              {/* Pending */}
-              <motion.div
+              {/* Pending */}
+              <Motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-yellow-50 border border-yellow-100 rounded-xl p-4 shadow-sm col-span-1 md:col-span-1"
+                className="bg-brand-50 border border-brand-100 rounded-xl p-4 shadow-sm col-span-1 md:col-span-1"
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <FaHourglassHalf className="text-yellow-600" />
-                  <h2 className="font-semibold text-sm md:text-base text-yellow-700">
+                  <FaHourglassHalf className="text-brand-600" />
+                  <h2 className="font-semibold text-sm md:text-base text-brand-700">
                     Pending (Not Attempted)
                   </h2>
-                  <span className="ml-auto text-xs font-bold bg-white/70 text-yellow-700 px-2 py-0.5 rounded-full">
+                  <span className="ml-auto text-xs font-bold bg-white/70 text-brand-700 px-2 py-0.5 rounded-full">
                     {pending.length}
                   </span>
                 </div>
@@ -188,7 +180,7 @@ const RecruiterCodingRoundResults = () => {
                     </table>
                   </div>
                 )}
-              </motion.div>
+              </Motion.div>
             </div>
           )}
         </div>
@@ -198,4 +190,3 @@ const RecruiterCodingRoundResults = () => {
 };
 
 export default RecruiterCodingRoundResults;
-
